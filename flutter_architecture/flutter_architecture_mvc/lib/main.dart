@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_architecture_mvc/controller.dart';
+import 'package:flutter_architecture_mvc/model.dart';
 
 import 'view.dart';
 
@@ -28,7 +30,10 @@ class _CounterAppState extends State<CounterApp> {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const CounterView(),
+      home: CounterView(
+        counterController: CounterController(CounterModel()),
+        counterModeController: CounterModeController(CounterModeModel()),
+      ),
     );
   }
 }
