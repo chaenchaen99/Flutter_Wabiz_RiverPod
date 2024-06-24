@@ -7,6 +7,10 @@ class Counter {
     counterValue++;
     print(counterValue);
   }
+
+  decrement() {
+    counterValue--;
+  }
 }
 
 class Counter2 {
