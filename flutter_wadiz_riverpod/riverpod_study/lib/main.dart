@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_study/provider/counter_cfw.dart';
 import 'package:riverpod_study/provider/counter_consumerwidget.dart';
 import 'package:riverpod_study/provider/counter_provider.dart';
+import 'package:riverpod_study/state_provider/my_state_provider.dart';
 
 void main() {
   runApp(
@@ -21,32 +22,19 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const CounterWidget(),
-              const CounterStatefulWidget(),
-              Consumer(
-                builder: (context, ref, child) {
-                  final counter = ref.read(counterProvider);
-                  return ElevatedButton(
-                    onPressed: () {
-                      counter.decrement();
-                    },
-                    child: const Text("감소"),
-                  );
-                },
-              )
-            ],
-          ),
+        body: Consumer(
+          builder: ((context, ref, child) {
+            final counter = ref.watch(counterStateProvider);
+            return Center(child: Text("$counter"));
+          }),
         ),
         floatingActionButton: Consumer(
           builder: (context, ref, child) {
-            final counter = ref.read(counterProvider);
             return FloatingActionButton(
               onPressed: () {
-                counter.increment();
+                ref
+                    .read(counterStateProvider.notifier)
+                    .update((state) => state += 1);
               },
               child: const Icon(
                 Icons.add,
