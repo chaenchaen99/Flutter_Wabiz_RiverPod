@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:riverpod_study/change_notifier_provider/my_change_notifier_provider.dart';
 import 'package:riverpod_study/stream_provider/simple_stream_provider.dart';
 
 void main() {
@@ -32,47 +33,34 @@ class MyHomePage extends StatelessWidget {
       //body: Center(child: MyStreamProviderWidget()),
       body: Consumer(
         builder: (BuildContext context, WidgetRef ref, Widget? child) {
-          return StreamBuilder(
-            //StreamBuilder는 주어진 스트림을 구독하고, 스트림의 데이터나 상태가 변경될 때마다 UI를 빌드
-            stream: ref.watch(simpleStreamProvider.future).asStream(),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Center(
-                  child: Text("${snapshot.data}"),
-                );
-              }
-              return const Text("로딩중");
-            },
+          final count = ref.watch(counterChangeNotifierProvider).counterValue;
+          return Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text("카운터 값: $count"),
+                ElevatedButton(
+                  onPressed: () {
+                    ref
+                        .read(counterChangeNotifierProvider.notifier)
+                        .increment();
+                  },
+                  child: const Text("증가"),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    ref
+                        .read(counterChangeNotifierProvider.notifier)
+                        .decrement();
+                  },
+                  child: const Text("감소"),
+                ),
+              ],
+            ),
           );
         },
       ),
     );
-  }
-}
-
-class MyStreamProviderWidget extends ConsumerWidget {
-  const MyStreamProviderWidget({super.key});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final counter = ref.watch(simpleStreamProvider);
-    return switch (counter) {
-      AsyncData(:final value) => Text("$value"),
-      AsyncError(:final error) => Text("$error"),
-      _ => const Text("로딩중"),
-    };
-    // return counter.when( // counter라는 변수의 상태에 따라 위젯을 렌더링
-    //   data: (data) => Center(
-    //     child: Text("$data"),
-    //   ),
-    //   error: (error, trace) {
-    //     return Center(
-    //       child: Text("$error"),
-    //     );
-    //   },
-    //   loading: () => const Center(
-    //     child: Text("로딩중"),
-    //   ),
-    // );
   }
 }
