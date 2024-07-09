@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:practice_go_router/go_router_builder/builder_router.dart';
-
+import 'shell_router/my_shell_router.dart';
 import 'go_router_basic/basic.dart';
 
 void main() {
@@ -16,13 +16,22 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      routerConfig: _router,
+      routerConfig: shellRouter,
     );
   }
 }
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key, this.child});
+
+  final Widget? child;
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  var pageIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -30,28 +39,33 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Home Screen"),
       ),
-      body: Center(
-        child: Column(
-          children: [
-            const Text("Home Screen 입니다."),
-            TextButton(
-              onPressed: () {
-                // GoRouter.of(context).go("/login");
-
-                // context.go("/login");
-                LoginRoute("").go(context);
-              },
-              child: const Text("로그인 페이지 이동"),
+      body: widget.child,
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: pageIndex,
+        onTap: (index) {
+          if (index == 0) {
+            GoRouter.of(context).go("/login");
+          } else {
+            GoRouter.of(context).go("/user");
+          }
+          setState(() {
+            pageIndex = index;
+          });
+        },
+        items: const [
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.login,
             ),
-            TextButton(
-              onPressed: () {
-                // context.push("/user");
-                UserRoute("10").push(context);
-              },
-              child: const Text("사용자 페이지로 이동"),
+            label: "로그인",
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.account_circle_outlined,
             ),
-          ],
-        ),
+            label: "프로필",
+          ),
+        ],
       ),
     );
   }
@@ -62,13 +76,8 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Login Screen"),
-      ),
-      body: const Center(
-        child: Text("로그인 화면"),
-      ),
+    return const Center(
+      child: Text("Login 화면 "),
     );
   }
 }
@@ -83,13 +92,15 @@ class UserScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("User Screen"),
-      ),
-      body: Center(
-        child: Text("User $userId"),
-      ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        const Text("User Screen"),
+        Center(
+          child: Text("User $userId"),
+        ),
+      ],
     );
   }
 }
