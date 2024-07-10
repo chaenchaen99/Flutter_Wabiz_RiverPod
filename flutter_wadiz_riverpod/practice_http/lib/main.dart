@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:practice_http/dio_widget.dart';
+import 'package:practice_http/retrofit/retrofit_widget.dart';
 
 const String api = "https://jsonplaceholder.typicode.com/posts";
 
@@ -35,7 +36,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return const Scaffold(
       body: SafeArea(
         child: Center(
-          child: DioWidget(),
+          child: RetrofitWidget(),
         ),
       ),
     );
