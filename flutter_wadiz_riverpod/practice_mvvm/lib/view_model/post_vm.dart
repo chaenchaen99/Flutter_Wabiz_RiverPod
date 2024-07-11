@@ -11,10 +11,6 @@ final postViewModelProvider = Provider((ref) {
   return PostViewModel(service);
 });
 
-final fetchPostsProvider = FutureProvider.autoDispose((ref) async {
-  return ref.watch(postViewModelProvider).getPosts();
-});
-
 class PostViewModel {
   PostServiceImpl? postServiceImpl;
 
@@ -56,6 +52,10 @@ class AsyncPostNotifier extends AsyncNotifier<List<PostModel>> {
 }
 
 //3.
+
+final fetchPostsProvider = FutureProvider.autoDispose((ref) async {
+  return ref.watch(postViewModelProvider).getPosts();
+});
 
 final fetchPostsProvider2 = FutureProvider.autoDispose((ref) async {
   @override
