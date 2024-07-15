@@ -132,6 +132,7 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
                             height: 220,
@@ -143,9 +144,49 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                           ),
-                          const Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [],
+                          Padding(
+                            padding: const EdgeInsets.all(
+                              16.0,
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  "12345678명이 기다려요.",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: 18,
+                                    color: AppColors.primary,
+                                  ),
+                                ),
+                                const Gap(8),
+                                const Text(
+                                  "아이돌 관리비법 | 준비 안된 얼굴라인도 살리는 세럼",
+                                ),
+                                const Gap(16),
+                                Text(
+                                  "세상에 없던 브랜드",
+                                  style: TextStyle(
+                                    color: AppColors.wabizGray[500],
+                                  ),
+                                ),
+                                const Gap(16),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: AppColors.bg,
+                                    borderRadius: BorderRadius.circular(3),
+                                  ),
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 6,
+                                    vertical: 4,
+                                  ),
+                                  child: const Text(
+                                    "오픈예정",
+                                    style: TextStyle(fontSize: 10),
+                                  ),
+                                ),
+                              ],
+                            ),
                           )
                         ],
                       ),
