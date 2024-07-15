@@ -18,6 +18,6 @@ HomeApi homeApiService(HomeApiServiceRef ref) {
   }
   return HomeApi(
     dio,
-    baseUrl: 'http://localhost:3000/api/v1',
+    baseUrl: 'http://$localhost:3000/api/v1',
   );
 }

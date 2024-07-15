@@ -20,7 +20,6 @@ HomeModel _$HomeModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$HomeModel {
-  @JsonKey(name: "status")
   String? get status => throw _privateConstructorUsedError;
   int? get totalCount => throw _privateConstructorUsedError;
   List<HomeItemModel> get projects => throw _privateConstructorUsedError;
@@ -36,10 +35,7 @@ abstract class $HomeModelCopyWith<$Res> {
   factory $HomeModelCopyWith(HomeModel value, $Res Function(HomeModel) then) =
       _$HomeModelCopyWithImpl<$Res, HomeModel>;
   @useResult
-  $Res call(
-      {@JsonKey(name: "status") String? status,
-      int? totalCount,
-      List<HomeItemModel> projects});
+  $Res call({String? status, int? totalCount, List<HomeItemModel> projects});
 }
 
 /// @nodoc
@@ -84,10 +80,7 @@ abstract class _$$HomeModelImplCopyWith<$Res>
       __$$HomeModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {@JsonKey(name: "status") String? status,
-      int? totalCount,
-      List<HomeItemModel> projects});
+  $Res call({String? status, int? totalCount, List<HomeItemModel> projects});
 }
 
 /// @nodoc
@@ -127,7 +120,7 @@ class __$$HomeModelImplCopyWithImpl<$Res>
 @JsonSerializable(fieldRename: FieldRename.snake)
 class _$HomeModelImpl with DiagnosticableTreeMixin implements _HomeModel {
   const _$HomeModelImpl(
-      {@JsonKey(name: "status") this.status,
+      {this.status,
       this.totalCount,
       final List<HomeItemModel> projects = const []})
       : _projects = projects;
@@ -136,7 +129,6 @@ class _$HomeModelImpl with DiagnosticableTreeMixin implements _HomeModel {
       _$$HomeModelImplFromJson(json);
 
   @override
-  @JsonKey(name: "status")
   final String? status;
   @override
   final int? totalCount;
@@ -196,7 +188,7 @@ class _$HomeModelImpl with DiagnosticableTreeMixin implements _HomeModel {
 
 abstract class _HomeModel implements HomeModel {
   const factory _HomeModel(
-      {@JsonKey(name: "status") final String? status,
+      {final String? status,
       final int? totalCount,
       final List<HomeItemModel> projects}) = _$HomeModelImpl;
 
@@ -204,7 +196,6 @@ abstract class _HomeModel implements HomeModel {
       _$HomeModelImpl.fromJson;
 
   @override
-  @JsonKey(name: "status")
   String? get status;
   @override
   int? get totalCount;
@@ -237,7 +228,6 @@ mixin _$HomeItemModel {
   int? get totalFundedCount => throw _privateConstructorUsedError;
   int? get totalFunded => throw _privateConstructorUsedError;
   String? get isOpen => throw _privateConstructorUsedError;
-  @JsonKey(name: 'category')
   String? get category => throw _privateConstructorUsedError;
   String? get type => throw _privateConstructorUsedError;
 
@@ -269,7 +259,7 @@ abstract class $HomeItemModelCopyWith<$Res> {
       int? totalFundedCount,
       int? totalFunded,
       String? isOpen,
-      @JsonKey(name: 'category') String? category,
+      String? category,
       String? type});
 }
 
@@ -401,7 +391,7 @@ abstract class _$$HomeItemModelImplCopyWith<$Res>
       int? totalFundedCount,
       int? totalFunded,
       String? isOpen,
-      @JsonKey(name: 'category') String? category,
+      String? category,
       String? type});
 }
 
@@ -529,7 +519,7 @@ class _$HomeItemModelImpl
       this.totalFundedCount,
       this.totalFunded,
       this.isOpen,
-      @JsonKey(name: 'category') this.category,
+      this.category,
       this.type});
 
   factory _$HomeItemModelImpl.fromJson(Map<String, dynamic> json) =>
@@ -566,7 +556,6 @@ class _$HomeItemModelImpl
   @override
   final String? isOpen;
   @override
-  @JsonKey(name: 'category')
   final String? category;
   @override
   final String? type;
@@ -686,7 +675,7 @@ abstract class _HomeItemModel implements HomeItemModel {
       final int? totalFundedCount,
       final int? totalFunded,
       final String? isOpen,
-      @JsonKey(name: 'category') final String? category,
+      final String? category,
       final String? type}) = _$HomeItemModelImpl;
 
   factory _HomeItemModel.fromJson(Map<String, dynamic> json) =
@@ -723,7 +712,6 @@ abstract class _HomeItemModel implements HomeItemModel {
   @override
   String? get isOpen;
   @override
-  @JsonKey(name: 'category')
   String? get category;
   @override
   String? get type;

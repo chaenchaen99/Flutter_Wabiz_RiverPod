@@ -10,7 +10,7 @@ part 'home_model.freezed.dart';
 class HomeModel with _$HomeModel {
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory HomeModel({
-    @JsonKey(name: "status") String? status,
+    String? status,
     int? totalCount,
     @Default([])
     List<HomeItemModel> projects, //기본값을 []로 설정하기 위해서, null이 되는 것을 방지
@@ -39,7 +39,7 @@ class HomeItemModel with _$HomeItemModel {
     int? totalFundedCount,
     int? totalFunded,
     String? isOpen,
-    @JsonKey(name: 'category') String? category,
+    String? category,
     String? type,
   }) = _HomeItemModel;
 
