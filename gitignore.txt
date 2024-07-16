@@ -8,6 +8,8 @@
 .buildlog/
 .history
 .svn/
+.apk
+.aab
 migrate_working_dir/
 
 # IntelliJ related
