@@ -1,18 +1,34 @@
+import 'dart:math';
+
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_wadiz_riverpod/theme.dart';
+import 'package:flutter_wadiz_riverpod/view_model/category/category_view_model.dart';
 import 'package:gap/gap.dart';
+import 'package:intl/intl.dart';
 
-class CategoryPage extends StatefulWidget {
+class CategoryPage extends ConsumerStatefulWidget {
   final String categoryId;
   const CategoryPage({super.key, required this.categoryId});
 
   @override
-  State<CategoryPage> createState() => _CategoryPageState();
+  ConsumerState<CategoryPage> createState() => _CategoryPageState();
 }
 
-class _CategoryPageState extends State<CategoryPage> {
+class _CategoryPageState extends ConsumerState<CategoryPage> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref
+          .read(categoryViewModelProvider.notifier)
+          .fetchProjects(widget.categoryId);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,78 +55,148 @@ class _CategoryPageState extends State<CategoryPage> {
           //최상위 프로젝트
           SizedBox(
             height: 204,
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.grey[800],
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "최고의 이어폰 | 전문가가 설계한 섬세한 이어폰",
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
+            child: Consumer(builder: (context, ref, child) {
+              final datas =
+                  ref.watch(fetchCategoryProjectsProvider(widget.categoryId));
+              return datas.when(
+                data: (data) {
+                  final titleProject =
+                      data.projects[Random().nextInt(data.projects.length) - 1];
+                  return Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
                       color: Colors.white,
+                      image: DecorationImage(
+                        image: CachedNetworkImageProvider(
+                            titleProject.thumbnail ?? ""),
+                        fit: BoxFit.cover,
+                        colorFilter: ColorFilter.mode(
+                          Colors.black.withOpacity(.2),
+                          BlendMode.darken,
+                        ),
+                      ),
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const Gap(12),
-                  const Text(
-                    "전문가가 만든 이어폰 하나둘셋넷다섯",
-                    style: TextStyle(
-                      color: Colors.white,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "${titleProject.title}",
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                            color: Colors.white,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const Gap(12),
+                        Text(
+                          "${titleProject.description}",
+                          style: const TextStyle(
+                            color: Colors.white,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const Gap(16),
+                        Container(
+                          height: 4,
+                          width: 120,
+                          decoration: const BoxDecoration(color: Colors.white),
+                        ),
+                      ],
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const Gap(16),
-                  Container(
-                    height: 4,
-                    width: 120,
-                    decoration: const BoxDecoration(color: Colors.white),
-                  ),
-                ],
-              ),
-            ),
+                  );
+                },
+                error: (error, stackTrace) {
+                  return Center(
+                    child: Text(error.toString()),
+                  );
+                },
+                loading: () {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                },
+              );
+            }),
           ),
           Container(
             padding: const EdgeInsets.fromLTRB(6, 16, 8, 0),
             height: 110,
             decoration: const BoxDecoration(
-              color: Colors.grey,
+              color: Colors.white,
             ),
-            child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                itemCount: 10,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.only(
-                      left: 32,
-                    ),
-                    child: IntrinsicWidth(
-                      child: Column(
-                        children: [
-                          const Gap(8),
-                          const CircleAvatar(
-                            radius: 16,
+            child: Consumer(builder: (context, ref, child) {
+              final types = ref.watch(fetchTypeTabsProvider);
+              return types.when(data: (data) {
+                return Consumer(builder: (context, ref, child) {
+                  final vm = ref.watch(categoryViewModelProvider);
+                  return ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      itemCount: data.length,
+                      itemBuilder: (context, index) {
+                        final tab = data[index];
+                        return GestureDetector(
+                          onTap: () {
+                            ref
+                                .read(categoryViewModelProvider.notifier)
+                                .updateType(tab);
+
+                            //데이터 가져오는 것 추가
+                            ref
+                                .read(categoryViewModelProvider.notifier)
+                                .fetchProjects(widget.categoryId);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                              left: 32,
+                            ),
+                            child: IntrinsicWidth(
+                              child: Column(
+                                children: [
+                                  const Gap(8),
+                                  SvgPicture.asset(
+                                    tab.imagePath ?? "",
+                                    width: 32,
+                                    height: 32,
+                                  ),
+                                  const Gap(12),
+                                  Text(
+                                    "${tab.type}",
+                                    style: TextStyle(
+                                      fontWeight:
+                                          vm.selectedType?.type == tab.type
+                                              ? FontWeight.bold
+                                              : FontWeight.normal,
+                                    ),
+                                  ),
+                                  const Gap(12),
+                                  Container(
+                                    height: 6,
+                                    color: vm.selectedType?.type == tab.type
+                                        ? Colors.black
+                                        : Colors.transparent,
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
-                          const Gap(12),
-                          const Text("테크"),
-                          const Gap(12),
-                          Container(
-                            height: 6,
-                            color: Colors.black,
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                }),
+                        );
+                      });
+                });
+              }, error: (error, trace) {
+                return Center(
+                  child: Text(error.toString()),
+                );
+              }, loading: () {
+                return const Center(
+                  child: CircularProgressIndicator.adaptive(),
+                );
+              });
+            }),
           ),
           const Divider(
             height: 0,
@@ -118,122 +204,185 @@ class _CategoryPageState extends State<CategoryPage> {
           Expanded(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 12),
-                    child: Row(
-                      children: [
-                        DropdownButton(
-                          items: const [
-                            DropdownMenuItem(
-                              child: Text("전체"),
-                            ),
-                          ],
-                          onChanged: (value) {},
-                          icon: const Icon(
-                            Icons.keyboard_arrow_down,
-                          ),
-                          underline: const SizedBox.shrink(),
-                        ),
-                        const Gap(24),
-                        DropdownButton(
-                          items: const [
-                            DropdownMenuItem(
-                              child: Text("추천순"),
-                            ),
-                          ],
-                          onChanged: (value) {},
-                          underline: const SizedBox.shrink(),
-                        ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: 10,
-                      itemBuilder: (context, index) {
-                        return InkWell(
-                          onTap: () {},
-                          child: Padding(
-                            padding: const EdgeInsets.only(
-                              bottom: 24,
-                            ),
-                            child: Row(
-                              children: [
-                                Container(
-                                  height: 120,
-                                  width: 164,
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Colors.blue,
-                                  ),
-                                  child: Stack(
-                                    children: [
-                                      Positioned(
-                                        right: 2,
-                                        top: 2,
-                                        child: IconButton(
-                                          onPressed: () {},
-                                          icon: const Icon(
-                                            Icons.favorite_border,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+              child: Consumer(builder: (context, ref, child) {
+                final projects =
+                    ref.watch(categoryViewModelProvider).projectState;
+                return projects.when(data: (data) {
+                  if (data.isEmpty) {
+                    return const Center(
+                      child: Text("등록된 데이터가 없습니다."),
+                    );
+                  }
+                  return Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        child: Row(
+                          children: [
+                            Consumer(builder: (context, ref, child) {
+                              final filter = ref
+                                  .watch(categoryViewModelProvider)
+                                  .projectFilter;
+                              return DropdownButton(
+                                value: filter,
+                                items: EnumCategoryProjectType.values.map((e) {
+                                  return DropdownMenuItem(
+                                    value: e,
+                                    onTap: () {
+                                      ref
+                                          .read(categoryViewModelProvider
+                                              .notifier)
+                                          .updateProjectFilter(e);
+                                    },
+                                    child: Text(e.value),
+                                  );
+                                }).toList(),
+                                onChanged: (value) {},
+                                icon: const Icon(
+                                  Icons.keyboard_arrow_down,
                                 ),
-                                const Gap(16),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const Text(
-                                        "내 손안에 와이파이 | 6G 라우터로 어디서든 빠르게",
-                                        maxLines: 2,
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      const Gap(8),
-                                      Text(
-                                        "작성자: 홍길동",
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            color: AppColors.wabizGray[500]),
-                                      ),
-                                      const Gap(8),
-                                      const Text(
-                                        "1000명 참여",
-                                        style: TextStyle(
-                                            fontSize: 12,
-                                            color: AppColors.primary),
-                                      ),
-                                      const Gap(8),
-                                      Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 6, vertical: 4),
-                                        decoration: const BoxDecoration(
-                                            color: AppColors.bg),
-                                        child: const Text(
-                                          "1,000원",
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                                underline: const SizedBox.shrink(),
+                              );
+                            }),
+                            const Gap(24),
+                            DropdownButton(
+                              items: const [
+                                DropdownMenuItem(
+                                  child: Text("추천순"),
                                 ),
                               ],
+                              onChanged: (value) {},
+                              underline: const SizedBox.shrink(),
                             ),
-                          ),
-                        );
-                      },
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: ListView.builder(
+                          padding: EdgeInsets.zero,
+                          itemCount: data.length,
+                          itemBuilder: (context, index) {
+                            final project = data[index];
+                            return InkWell(
+                              onTap: () {},
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                  bottom: 24,
+                                ),
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      height: 120,
+                                      width: 164,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Colors.blue,
+                                        image: DecorationImage(
+                                            image: CachedNetworkImageProvider(
+                                              project.thumbnail ?? "",
+                                            ),
+                                            fit: BoxFit.cover,
+                                            colorFilter: ColorFilter.mode(
+                                                Colors.black.withOpacity(.2),
+                                                BlendMode.darken)),
+                                      ),
+                                      child: Stack(
+                                        children: [
+                                          Positioned(
+                                            right: 2,
+                                            top: 2,
+                                            child: IconButton(
+                                              onPressed: () {},
+                                              icon: const Icon(
+                                                Icons.favorite_border,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    const Gap(16),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "${project.title}",
+                                            maxLines: 2,
+                                            overflow: TextOverflow.ellipsis,
+                                          ),
+                                          const Gap(8),
+                                          Text(
+                                            "${project.owner}",
+                                            style: TextStyle(
+                                                fontSize: 12,
+                                                color:
+                                                    AppColors.wabizGray[500]),
+                                          ),
+                                          const Gap(8),
+                                          Text(
+                                            "${NumberFormat("###,###,###").format(project.totalFundedCount)}명 참여",
+                                            style: const TextStyle(
+                                                fontSize: 12,
+                                                color: AppColors.primary),
+                                          ),
+                                          const Gap(8),
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 6, vertical: 4),
+                                            decoration: const BoxDecoration(
+                                                color: AppColors.bg),
+                                            child: Text(
+                                              switch (
+                                                  project.totalFunded ?? 0) {
+                                                >= 100000000 && > 10000000 =>
+                                                  "${NumberFormat.currency(
+                                                    locale: "ko_KR",
+                                                    symbol: "",
+                                                  ).format((project.totalFunded ?? 0) ~/ 100000000)}억 원+",
+                                                >= 10000000 && > 10000 =>
+                                                  "${NumberFormat.currency(
+                                                    locale: "ko_KR",
+                                                    symbol: "",
+                                                  ).format((project.totalFunded ?? 0) ~/ 10000000)}천만 원+",
+                                                > 10000 =>
+                                                  "${NumberFormat.currency(
+                                                    locale: "ko_KR",
+                                                    symbol: "",
+                                                  ).format((project.totalFunded ?? 0) ~/ 10000)}만 원+",
+                                                _ => "",
+                                              },
+                                              style: const TextStyle(
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  );
+                }, error: (error, trace) {
+                  return Center(
+                    child: Text(
+                      error.toString(),
                     ),
-                  ),
-                ],
-              ),
+                  );
+                }, loading: () {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                });
+              }),
             ),
           ),
         ],

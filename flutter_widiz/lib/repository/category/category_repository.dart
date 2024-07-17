@@ -7,6 +7,7 @@ part 'category_repository.g.dart';
 
 @riverpod
 CategoryRepository categoryRepository(CategoryRepositoryRef ref) {
+  //AutoDisposeProvider로 만들었다.
   final service = ref.watch(categoryApiServiceProvider);
   return CategoryRepository(service);
 }
