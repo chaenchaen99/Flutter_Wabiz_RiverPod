@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_wadiz_riverpod/views/category/category_page.dart';
 import 'package:flutter_wadiz_riverpod/views/home/home_page.dart';
+import 'package:flutter_wadiz_riverpod/views/my/my_page.dart';
 import 'package:flutter_wadiz_riverpod/views/wabiz_app_shell.dart';
 import 'package:go_router/go_router.dart';
 
@@ -15,7 +16,10 @@ final router = GoRouter(
       navigatorKey: _shellNavigatorKey,
       builder: (context, state, child) {
         return WabizAppShell(
-          currentIndex: 0,
+          currentIndex: switch (state.uri.path) {
+            var p when p.startsWith("my") => 3,
+            _ => 0,
+          },
           child: child,
         );
       },
@@ -32,6 +36,11 @@ final router = GoRouter(
                     return CategoryPage(categoryId: id ?? "0");
                   })
             ]),
+        GoRoute(
+          path: "/my",
+          parentNavigatorKey: _shellNavigatorKey,
+          builder: (context, state) => const MyPage(),
+        ),
       ],
     ),
   ],

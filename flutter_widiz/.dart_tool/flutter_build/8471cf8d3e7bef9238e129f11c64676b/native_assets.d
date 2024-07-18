@@ -1,1 +1,0 @@
- /Users/jeongchaeyeon/2024/Projects/flutter_wadiz_riverpod/flutter_wadiz_riverpod/flutter_widiz/.dart_tool/flutter_build/8471cf8d3e7bef9238e129f11c64676b/native_assets.yaml: 
