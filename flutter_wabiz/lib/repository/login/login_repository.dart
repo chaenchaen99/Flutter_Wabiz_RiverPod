@@ -20,6 +20,15 @@ class LoginRepository {
     final result = await loginService.checkEmail(body);
     return result;
   }
+
+  Future<ResponseModel?> signIn(LoginModel body) async {
+    final result = await loginService.signIn(body);
+    if (result.response.statusCode == 204) {
+      return null;
+    } else {
+      return ResponseModel.fromJson(result.data);
+    }
+  }
 }
 
 @Riverpod(keepAlive: true)

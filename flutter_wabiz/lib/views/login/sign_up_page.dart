@@ -168,6 +168,7 @@ class _SignUpPageState extends State<SignUpPage> {
                     border: InputBorder.none,
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide.none,
                     ),
                     suffixIcon: IconButton(
                       icon: const Icon(Icons.visibility),
@@ -184,7 +185,8 @@ class _SignUpPageState extends State<SignUpPage> {
                 ),
                 const Gap(12),
                 TextFormField(
-                  controller: password2TextController,
+                  controller:
+                      password2TextController, //텍스트 필드값을 제어하고 관리하기 위해 사용
                   decoration: InputDecoration(
                     hintText: "비밀번호 확인",
                     filled: true,
@@ -192,14 +194,16 @@ class _SignUpPageState extends State<SignUpPage> {
                     border: InputBorder.none,
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide.none,
                     ),
                     suffixIcon: IconButton(
                       icon: const Icon(Icons.visibility),
                       onPressed: () {},
                     ),
                   ),
-                  obscureText: true,
+                  obscureText: true, //입력된 텍스트를 숨긴다
                   validator: (value) {
+                    //입력된 값의 유효성을 검사
                     if (value == null || value.isEmpty) {
                       return "필수 입력 항목입니다.";
                     }

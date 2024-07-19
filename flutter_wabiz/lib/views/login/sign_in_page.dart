@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_wadiz_riverpod/theme.dart';
+import 'package:flutter_wadiz_riverpod/view_model/login/login_view_model.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 
@@ -51,7 +53,7 @@ class _SingInPageState extends State<SingInPage> {
                     ),
                     const Gap(20),
                     TextFormField(
-                      controller: emailTextController,
+                      controller: passwordTextController,
                       decoration: const InputDecoration(
                         hintText: "비밀번호 입력",
                       ),
@@ -75,26 +77,42 @@ class _SingInPageState extends State<SingInPage> {
                 ],
               ),
               const Gap(24),
-              GestureDetector(
-                onTap: () async {},
-                child: Container(
-                  height: 50,
-                  decoration: BoxDecoration(
-                    color: AppColors.secondary,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: const Center(
-                    child: Text(
-                      "이메일로 로그인하기",
-                      style: TextStyle(
-                        color: AppColors.primary,
-                        fontWeight: FontWeight.w500,
-                        fontSize: 16,
+              Consumer(builder: (context, ref, child) {
+                return GestureDetector(
+                  onTap: () async {
+                    if (emailTextController.text.isEmpty ||
+                        passwordTextController.text.isEmpty) {
+                      return;
+                    }
+                    final result = await ref
+                        .read(loginViewModelProvider.notifier)
+                        .signIn(emailTextController.text.trim(),
+                            passwordTextController.text.trim());
+                    if (result != null) {
+                      if (context.mounted) {
+                        context.go("/my");
+                      }
+                    }
+                  },
+                  child: Container(
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: AppColors.secondary,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        "이메일로 로그인하기",
+                        style: TextStyle(
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ),
+                );
+              }),
               const Gap(24),
               Row(
                 children: [
