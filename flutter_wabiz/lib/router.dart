@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_wadiz_riverpod/views/category/category_page.dart';
 import 'package:flutter_wadiz_riverpod/views/home/home_page.dart';
+import 'package:flutter_wadiz_riverpod/views/login/sign_in_page.dart';
 import 'package:flutter_wadiz_riverpod/views/login/sign_up_page.dart';
 import 'package:flutter_wadiz_riverpod/views/my/my_page.dart';
 import 'package:flutter_wadiz_riverpod/views/wabiz_app_shell.dart';
@@ -13,6 +14,13 @@ final router = GoRouter(
   navigatorKey: _rootNavigatorKey,
   initialLocation: "/home",
   routes: [
+    GoRoute(
+      path: "/sign-in",
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (context, state) {
+        return const SingInPage();
+      },
+    ),
     GoRoute(
       path: "/sign-up",
       parentNavigatorKey: _rootNavigatorKey,

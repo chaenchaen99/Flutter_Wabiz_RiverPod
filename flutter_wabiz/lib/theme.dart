@@ -52,6 +52,13 @@ final ThemeData wabizDefaultTheme = ThemeData(
         width: 1.0,
       ),
     ),
+    focusedBorder: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(10),
+      borderSide: const BorderSide(
+        color: AppColors.primary,
+        width: 1.0,
+      ),
+    ),
     hintStyle: TextStyle(
       // 힌트 텍스트 스타일
       fontSize: 16,
