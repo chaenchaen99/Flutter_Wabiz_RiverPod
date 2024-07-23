@@ -6,6 +6,7 @@ import 'package:flutter_wadiz_riverpod/views/login/sign_up_page.dart';
 import 'package:flutter_wadiz_riverpod/views/my/my_page.dart';
 import 'package:flutter_wadiz_riverpod/views/project/add_project_page.dart';
 import 'package:flutter_wadiz_riverpod/views/project/add_reward_page.dart';
+import 'package:flutter_wadiz_riverpod/views/project/project_detail_page.dart';
 import 'package:flutter_wadiz_riverpod/views/wabiz_app_shell.dart';
 import 'package:go_router/go_router.dart';
 
@@ -74,6 +75,15 @@ final router = GoRouter(
           },
         )
       ],
+    ),
+    GoRoute(
+      path: "/detail",
+      builder: (context, state) {
+        final project = state.extra as String;
+        return ProjectDetailPage(
+          project: project,
+        );
+      },
     ),
   ],
 );

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_wadiz_riverpod/theme.dart';
@@ -167,6 +169,14 @@ class _HomePageState extends State<HomePage> {
                           itemBuilder: (context, index) {
                             final project = data.projects[index];
                             return InkWell(
+                              onTap: () {
+                                context.push(
+                                  "/detail",
+                                  extra: json.encode(
+                                    project.toJson(),
+                                  ),
+                                );
+                              },
                               child: Container(
                                 margin: const EdgeInsets.only(
                                   bottom: 8,
