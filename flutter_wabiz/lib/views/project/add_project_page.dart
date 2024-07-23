@@ -2,10 +2,16 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:flutter_wadiz_riverpod/model/project/project_model.dart';
 import 'package:flutter_wadiz_riverpod/shared/enum/enum_project_class.dart';
 import 'package:flutter_wadiz_riverpod/shared/model/project_type.dart';
 import 'package:flutter_wadiz_riverpod/theme.dart';
+import 'package:flutter_wadiz_riverpod/view_model/login/login_view_model.dart';
+import 'package:flutter_wadiz_riverpod/view_model/project/project_view_model.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
 
@@ -56,8 +62,68 @@ class _AddProjectPageState extends State<AddProjectPage> {
                 onTap: () {
                   showModalBottomSheet(
                       context: context,
+                      isScrollControlled: true,
+                      backgroundColor: Colors.white,
                       builder: (context) {
-                        return Container();
+                        return SizedBox(
+                          height: MediaQuery.sizeOf(context).height - 240,
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    const Text("카테고리"),
+                                    IconButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      icon: const Icon(Icons.clear),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              Expanded(
+                                child: Consumer(
+                                  builder: (context, ref, child) {
+                                    final types =
+                                        ref.watch(fetchProjectTypesProvider);
+                                    return switch (types) {
+                                      AsyncData(:final value) =>
+                                        ListView.separated(
+                                          itemBuilder: (context, index) {
+                                            final data = value[index];
+                                            return ListTile(
+                                              leading: SvgPicture.asset(
+                                                  data.imagePath ?? ""),
+                                              title: Text("${data.type}"),
+                                              onTap: () {
+                                                setState(() {
+                                                  projectType = data;
+                                                });
+                                                Navigator.of(context).pop();
+                                              },
+                                            );
+                                          },
+                                          separatorBuilder: (_, __) {
+                                            return const Divider();
+                                          },
+                                          itemCount: value.length,
+                                        ),
+                                      AsyncError(:var error) =>
+                                        Text(error.toString()),
+                                      _ => const Center(
+                                          child: CircularProgressIndicator(),
+                                        ),
+                                    };
+                                  },
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
                       });
                 },
                 child: Container(
@@ -312,24 +378,77 @@ class _AddProjectPageState extends State<AddProjectPage> {
                 maxLength: 100,
               ),
               const Gap(24),
-              MaterialButton(
-                onPressed: () {},
-                height: 50,
-                minWidth: double.infinity,
-                elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                color: AppColors.primary,
-                child: const Text(
-                  "저장하기",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                    fontSize: 16,
+              Consumer(builder: (context, ref, index) {
+                return MaterialButton(
+                  onPressed: () async {
+                    final readImage = await image?.readAsBytes();
+                    final resposne = await ref
+                        .read(projectViewModelProvider.notifier)
+                        .createProject(
+                          ProjectItemModel(
+                            categoryId: 1,
+                            projectTypeId: projectType?.id,
+                            title: titleTextEditingController.text.trim(),
+                            owner: makerTextEditingController.text.trim(),
+                            deadline: deadlineTextEditingController.text.trim(),
+                            description:
+                                descriptionTextEditingController.text.trim(),
+                            price: int.tryParse(
+                                priceTextEditingController.text.trim()),
+                            projectClass: enumProjectClass.title,
+                            userId: ref
+                                .read(loginViewModelProvider)
+                                .userId
+                                .toString(),
+                            projectImage: readImage ?? [],
+                          ),
+                        );
+                    if (resposne) {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text("안내"),
+                              content: const Text("프로젝트 정보 등록 성공"),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    context.go("/my");
+                                  },
+                                  child: const Text(
+                                    "마이페이지",
+                                  ),
+                                )
+                              ],
+                            );
+                          });
+                    } else {
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text("처리실패"),
+                          ),
+                        );
+                      }
+                    }
+                  },
+                  height: 50,
+                  minWidth: double.infinity,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                ),
-              )
+                  color: AppColors.primary,
+                  child: const Text(
+                    "저장하기",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                );
+              })
             ],
           ),
         ),
