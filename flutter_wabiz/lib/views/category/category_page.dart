@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter_wadiz_riverpod/theme.dart';
 import 'package:flutter_wadiz_riverpod/view_model/category/category_view_model.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class CategoryPage extends ConsumerStatefulWidget {
@@ -264,7 +266,14 @@ class _CategoryPageState extends ConsumerState<CategoryPage> {
                           itemBuilder: (context, index) {
                             final project = data[index];
                             return InkWell(
-                              onTap: () {},
+                              onTap: () {
+                                context.push(
+                                  "/deatil",
+                                  extra: json.encode(
+                                    project.toJson(),
+                                  ),
+                                );
+                              },
                               child: Padding(
                                 padding: const EdgeInsets.only(
                                   bottom: 24,

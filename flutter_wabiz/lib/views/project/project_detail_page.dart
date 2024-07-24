@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_wadiz_riverpod/model/project/project_model.dart';
 import 'package:flutter_wadiz_riverpod/theme.dart';
+import 'package:flutter_wadiz_riverpod/view_model/project/project_view_model.dart';
 import 'package:flutter_wadiz_riverpod/views/project/detail/project_detail_widget.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
@@ -56,104 +58,126 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Container(
-            height: 240,
-            decoration: BoxDecoration(
-              color: Colors.grey[300]!,
-              image: DecorationImage(
-                image: CachedNetworkImageProvider(
-                  projectItemModel.thumbnail ?? "",
-                ),
-                fit: BoxFit.cover,
-                colorFilter: ColorFilter.mode(
-                  Colors.black.withOpacity(.2),
-                  BlendMode.darken,
-                ),
-              ),
-            ),
+      body: Consumer(builder: (context, ref, child) {
+        final project = ref.watch(
+          projectDetailViewModelProvider(
+            projectItemModel.id.toString(),
           ),
-          const Divider(
-            color: AppColors.newBg,
-            height: 32,
-          ),
-          Expanded(
-            child: ValueListenableBuilder(
-                valueListenable: isMore,
-                builder: (context, value, child) {
-                  return Stack(
-                    children: [
-                      Positioned.fill(
-                        //Stack위젯의 전체영역을 채우는 위젯 생성
-                        child: SingleChildScrollView(
-                          physics: !value
-                              ? const NeverScrollableScrollPhysics() //스크롤 불가능
-                              : const BouncingScrollPhysics(), // 스크롤 가능
-                          child: ProjectDetailWidget(data: projectItemModel),
-                        ),
+        );
+        return project.when(
+          data: (data) {
+            return Column(
+              children: [
+                Container(
+                  height: 240,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300]!,
+                    image: DecorationImage(
+                      image: CachedNetworkImageProvider(
+                        projectItemModel.thumbnail ?? "",
                       ),
-                      if (!value)
-                        Positioned(
-                          left: 16,
-                          right: 16,
-                          bottom: 0,
-                          child: Container(
-                            height: 100,
-                            decoration: BoxDecoration(
-                              gradient: LinearGradient(
-                                  colors: [
-                                    Colors.white,
-                                    Colors.white,
-                                    Colors.white,
-                                    Colors.white.withOpacity(.7),
-                                    Colors.white.withOpacity(.1),
-                                  ],
-                                  begin: Alignment.bottomCenter,
-                                  end: Alignment.topCenter),
+                      fit: BoxFit.cover,
+                      colorFilter: ColorFilter.mode(
+                        Colors.black.withOpacity(.2),
+                        BlendMode.darken,
+                      ),
+                    ),
+                  ),
+                ),
+                const Divider(
+                  color: AppColors.newBg,
+                  height: 32,
+                ),
+                Expanded(
+                  child: ValueListenableBuilder(
+                      valueListenable: isMore,
+                      builder: (context, value, child) {
+                        return Stack(
+                          children: [
+                            Positioned.fill(
+                              //Stack위젯의 전체영역을 채우는 위젯 생성
+                              child: SingleChildScrollView(
+                                physics: !value
+                                    ? const NeverScrollableScrollPhysics() //스크롤 불가능
+                                    : const BouncingScrollPhysics(), // 스크롤 가능
+                                child: ProjectDetailWidget(data: data),
+                              ),
                             ),
-                          ),
-                        ),
-                      if (!value)
-                        Positioned(
-                            left: 16,
-                            right: 16,
-                            bottom: 16,
-                            child: GestureDetector(
-                              onTap: () => isMore.value = true,
-                              child: Container(
-                                height: 50,
-                                decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  border: Border.all(
-                                    color: AppColors.primary,
+                            if (!value)
+                              Positioned(
+                                left: 16,
+                                right: 16,
+                                bottom: 0,
+                                child: Container(
+                                  height: 100,
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                        colors: [
+                                          Colors.white,
+                                          Colors.white,
+                                          Colors.white,
+                                          Colors.white.withOpacity(.7),
+                                          Colors.white.withOpacity(.1),
+                                        ],
+                                        begin: Alignment.bottomCenter,
+                                        end: Alignment.topCenter),
                                   ),
                                 ),
-                                child: const Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      "스토리 더보기",
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: AppColors.primary,
+                              ),
+                            if (!value)
+                              Positioned(
+                                  left: 16,
+                                  right: 16,
+                                  bottom: 16,
+                                  child: GestureDetector(
+                                    onTap: () => isMore.value = true,
+                                    child: Container(
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        border: Border.all(
+                                          color: AppColors.primary,
+                                        ),
+                                      ),
+                                      child: const Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "스토리 더보기",
+                                            style: TextStyle(
+                                              fontSize: 16,
+                                              color: AppColors.primary,
+                                            ),
+                                          ),
+                                          Gap(12),
+                                          Icon(
+                                            Icons.keyboard_arrow_down,
+                                            color: AppColors.primary,
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                    Gap(12),
-                                    Icon(
-                                      Icons.keyboard_arrow_down,
-                                      color: AppColors.primary,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            )),
-                    ],
-                  );
-                }),
-          ),
-        ],
-      ),
+                                  )),
+                          ],
+                        );
+                      }),
+                ),
+              ],
+            );
+          },
+          error: (error, stackTrace) {
+            return const Center(
+              child: Text("Error"),
+            );
+          },
+          loading: () {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          },
+        );
+      }),
       bottomNavigationBar: const _BottomAppBar(),
     );
   }

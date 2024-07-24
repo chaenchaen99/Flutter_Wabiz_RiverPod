@@ -11,7 +11,7 @@ class ProjectModel with _$ProjectModel {
   @JsonSerializable(fieldRename: FieldRename.snake)
   const factory ProjectModel({
     @Default([])
-    List<ProjectItemModel> projects, //기본값을 []로 설정하기 위해서, null이 되는 것을 방지
+    List<ProjectItemModel> data, //기본값을 []로 설정하기 위해서, null이 되는 것을 방지
   }) = _ProjectModel;
 
   factory ProjectModel.fromJson(Map<String, dynamic> json) =>

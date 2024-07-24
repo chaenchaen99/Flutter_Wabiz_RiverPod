@@ -39,11 +39,16 @@ class ProjectRepository {
     final result = await projectService.getProjectMyUserId(userId);
     return result;
   }
+
+  Future<ProjectModel> getProjectByProjectId(String id) async {
+    final result = await projectService.getProjectByProjectId(id);
+    return result;
+  }
 }
 
 @riverpod //@riverpod 어노테이션은 projectRepository 함수를 Riverpod의 Provider로 만들어준다.
 //Provider는 의존성 주입을 쉽게 해주고, 상태를 관리할 수 있게 해준다.
-ProjectRepository projectRepository(ref) {
+ProjectRepository projectRepository(ProjectRepositoryRef ref) {
   //ref는 Provider의 레퍼런스로 다른 Provider를 참조하거나 관리할 수 있게 해준다.
   final service = ref.watch(projectApiServiceProvider);
   return ProjectRepository(service);
