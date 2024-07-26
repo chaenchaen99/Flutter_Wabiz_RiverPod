@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_wadiz_riverpod/views/category/category_page.dart';
+import 'package:flutter_wadiz_riverpod/views/favorite/favorite_page.dart';
 import 'package:flutter_wadiz_riverpod/views/home/home_page.dart';
 import 'package:flutter_wadiz_riverpod/views/login/sign_in_page.dart';
 import 'package:flutter_wadiz_riverpod/views/login/sign_up_page.dart';
@@ -37,6 +38,7 @@ final router = GoRouter(
         return WabizAppShell(
           currentIndex: switch (state.uri.path) {
             var p when p.startsWith("my") => 3,
+            var p when p.startsWith("favorite") => 2,
             _ => 0,
           },
           child: child,
@@ -55,6 +57,11 @@ final router = GoRouter(
                     return CategoryPage(categoryId: id ?? "0");
                   })
             ]),
+        GoRoute(
+          path: "/favorite",
+          parentNavigatorKey: _shellNavigatorKey,
+          builder: (context, state) => const FavoritePage(),
+        ),
         GoRoute(
           path: "/my",
           parentNavigatorKey: _shellNavigatorKey,
