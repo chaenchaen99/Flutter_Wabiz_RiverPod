@@ -1,12 +1,19 @@
-# 프로젝트 소개
-크라우드 펀딩 앱
+## ⎷ 프로젝트 소개
+크라우드 펀딩 앱 - 구현 이미지
+
+<table>
+  <tr>
+    <td><img src="https://github.com/user-attachments/assets/02944d15-467c-4333-8108-44f97f213015" alt="Screenshot_1722262705" style="width:100%;"></td>
+    <td><img src="https://github.com/user-attachments/assets/87459c6f-8580-4fd9-9db0-f8c871f1c654" alt="Screenshot_1722262736" style="width:100%;"></td>
+    <td><img src="https://github.com/user-attachments/assets/1a81eadb-53b8-42d6-b7fe-a12aa6e187a2" alt="Screenshot_1722262764" style="width:100%;"></td>
+    <td><img src="https://github.com/user-attachments/assets/a2ea98fa-0997-48ac-92e6-dea60bfd55c9" alt="Screenshot_1722262780" style="width:100%;"></td>
+    <td><img src="https://github.com/user-attachments/assets/b875bd1c-1212-4fed-9876-90e571da1eff" alt="Screenshot_1722262776" style="width:100%;"></td>
+  </tr>
+</table>
 
 </br>
 
-
-</br>
-
-## 폴더 구조 설계
+## ⎷ 폴더 구조 설계
 
 계층기반: 계층 내 Feature가 포함된 방식
 
@@ -38,7 +45,7 @@
 ```
 
 
-# 라우터 구조 설계
+## ⎷ 라우터 구조 설계
 
 | 홈 | /home | initialLocation | ShellRoute | </br>
 | 로그인   | /login | </br>
