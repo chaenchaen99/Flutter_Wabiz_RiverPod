@@ -270,7 +270,7 @@ class _CategoryPageState extends ConsumerState<CategoryPage> {
                             return InkWell(
                               onTap: () {
                                 context.push(
-                                  "/deatil",
+                                  "/detail",
                                   extra: json.encode(
                                     project.toJson(),
                                   ),

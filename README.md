@@ -1,6 +1,11 @@
 # 프로젝트 소개
 크라우드 펀딩 앱
-f
+
+</br>
+
+
+</br>
+
 ## 폴더 구조 설계
 
 계층기반: 계층 내 Feature가 포함된 방식
@@ -35,12 +40,12 @@ f
 
 # 라우터 구조 설계
 
-| 홈 | /home | initialLocation | ShellRoute |
-| 로그인   | /login |   |  |
-| 회원가입  | /sign-up | 로그인 화면에서 이동  | push |
-| 즐겨찾기(구독)  | /favorite |   |   |
-| 마이페이지  | /my |   |   |
-| 프로젝트 추가  | /add |   |   |
-| 리워드  | /add/reward/:id | 마이페이지에서 이동 | push |
-| 프로젝트 상세  | /detail |   |   |
-| 카테고리  | /home/category/:id |   |   |
+| 홈 | /home | initialLocation | ShellRoute | </br>
+| 로그인   | /login | </br>
+| 회원가입  | /sign-up | </br>
+| 즐겨찾기(구독)  | /favorite | </br> 
+| 마이페이지  | /my |  </br>
+| 프로젝트 추가  | /add | </br>
+| 리워드  | /add/reward/:id | </br>
+| 프로젝트 상세  | /detail |  </br>
+| 카테고리  | /home/category/:id | </br>
