@@ -3,8 +3,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_wadiz_riverpod/model/category/category_model.dart';
 import 'package:flutter_wadiz_riverpod/model/project/project_model.dart';
 import 'package:flutter_wadiz_riverpod/theme.dart';
+import 'package:flutter_wadiz_riverpod/view_model/favorite/favorite_view_model.dart';
 import 'package:flutter_wadiz_riverpod/view_model/project/project_view_model.dart';
 import 'package:flutter_wadiz_riverpod/views/project/detail/project_detail_widget.dart';
 import 'package:gap/gap.dart';
@@ -178,16 +180,24 @@ class _ProjectDetailPageState extends State<ProjectDetailPage> {
           },
         );
       }),
-      bottomNavigationBar: const _BottomAppBar(),
+      bottomNavigationBar: _BottomAppBar(
+        projectItemModel: projectItemModel,
+      ),
     );
   }
 }
 
-class _BottomAppBar extends StatelessWidget {
-  const _BottomAppBar({super.key});
+class _BottomAppBar extends ConsumerWidget {
+  final ProjectItemModel projectItemModel;
+  const _BottomAppBar({super.key, required this.projectItemModel});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final favorites = ref.watch(favoriteViewModelProvider);
+    final current = favorites.projects
+        .where((element) => element.id == projectItemModel.id)
+        .toList();
+
     return BottomAppBar(
       height: 84,
       color: Colors.white,
@@ -210,9 +220,48 @@ class _BottomAppBar extends StatelessWidget {
             Column(
               children: [
                 IconButton(
-                  onPressed: () {},
-                  icon: const Icon(
-                    Icons.favorite_border,
+                  onPressed: () {
+                    if (current.isNotEmpty) {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text("안내"),
+                              content: const Text("구독을 취소할까요?"),
+                              actions: [
+                                TextButton(
+                                    onPressed: () {
+                                      ref
+                                          .read(favoriteViewModelProvider
+                                              .notifier)
+                                          .removeItem(
+                                            CategoryItemModel(
+                                              id: projectItemModel.id,
+                                            ),
+                                          );
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text("네")),
+                              ],
+                            );
+                          });
+                      return;
+                    }
+                    ref.read(favoriteViewModelProvider.notifier).addItem(
+                          CategoryItemModel(
+                            id: projectItemModel.id,
+                            thumbnail: projectItemModel.thumbnail,
+                            description: projectItemModel.description,
+                            title: projectItemModel.title,
+                            owner: projectItemModel.owner,
+                            totalFunded: projectItemModel.totalFunded,
+                            totalFundedCount: projectItemModel.totalFundedCount,
+                          ),
+                        );
+                  },
+                  icon: Icon(
+                    current.isNotEmpty ? Icons.favorite : Icons.favorite_border,
+                    color: current.isNotEmpty ? Colors.red : Colors.black,
                   ),
                 ),
                 const Text("1만+"),
