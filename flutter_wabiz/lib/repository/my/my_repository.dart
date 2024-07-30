@@ -1,10 +1,15 @@
+import 'package:flutter_wadiz_riverpod/model/project/project_model.dart';
+import 'package:flutter_wadiz_riverpod/service/project/project_api.dart';
+import 'package:flutter_wadiz_riverpod/service/project/project_api_service.dart';
+import 'package:flutter_wadiz_riverpod/shared/model/response_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'my_repository.g.dart';
 
 @riverpod
 MyRepositoryImpl myRepository(MyRepositoryRef ref) {
-  return MyRepositoryImpl();
+  final projectService = ref.watch(projectApiServiceProvider);
+  return MyRepositoryImpl(projectService);
 }
 
 abstract class MyRepository {
@@ -12,28 +17,33 @@ abstract class MyRepository {
   Future getProjectsByUserId(String userId);
 
   //프로젝트가 목록에 있을 때 프로젝트 열고 닫기
-  Future updateProjectOpenState(String id);
+  Future updateProjectOpenState(String id, ProjectItemModel body);
 
   //프로젝트 삭제
   Future deleteProject(String id);
 }
 
 class MyRepositoryImpl implements MyRepository {
+  ProjectApiClient projectService;
+
+  MyRepositoryImpl(this.projectService);
+
   @override
-  Future deleteProject(String id) {
-    // TODO: implement deleteProject
-    throw UnimplementedError();
+  Future<ResponseModel> deleteProject(String id) async {
+    final result = await projectService.deleteProject(id);
+    return result;
   }
 
   @override
-  Future getProjectsByUserId(String userId) {
-    // TODO: implement getProjectsByUserId
-    throw UnimplementedError();
+  Future getProjectsByUserId(String userId) async {
+    final result = await projectService.getProjectByProjectId(userId);
+    return result;
   }
 
   @override
-  Future updateProjectOpenState(String id) {
-    // TODO: implement updateProjectOpenState
-    throw UnimplementedError();
+  Future<ResponseModel> updateProjectOpenState(
+      String id, ProjectItemModel body) async {
+    final result = await projectService.updateProjectOpenState(id, body);
+    return result;
   }
 }

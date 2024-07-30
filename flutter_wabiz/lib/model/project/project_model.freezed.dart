@@ -183,7 +183,6 @@ mixin _$ProjectItemModel {
   String? get owner => throw _privateConstructorUsedError;
   int? get price => throw _privateConstructorUsedError;
   String? get thumbnail => throw _privateConstructorUsedError;
-  String? get count => throw _privateConstructorUsedError;
   String? get deadline => throw _privateConstructorUsedError;
   String? get description => throw _privateConstructorUsedError;
   int? get waitlistCount => throw _privateConstructorUsedError;
@@ -217,7 +216,6 @@ abstract class $ProjectItemModelCopyWith<$Res> {
       String? owner,
       int? price,
       String? thumbnail,
-      String? count,
       String? deadline,
       String? description,
       int? waitlistCount,
@@ -252,7 +250,6 @@ class _$ProjectItemModelCopyWithImpl<$Res, $Val extends ProjectItemModel>
     Object? owner = freezed,
     Object? price = freezed,
     Object? thumbnail = freezed,
-    Object? count = freezed,
     Object? deadline = freezed,
     Object? description = freezed,
     Object? waitlistCount = freezed,
@@ -300,10 +297,6 @@ class _$ProjectItemModelCopyWithImpl<$Res, $Val extends ProjectItemModel>
       thumbnail: freezed == thumbnail
           ? _value.thumbnail
           : thumbnail // ignore: cast_nullable_to_non_nullable
-              as String?,
-      count: freezed == count
-          ? _value.count
-          : count // ignore: cast_nullable_to_non_nullable
               as String?,
       deadline: freezed == deadline
           ? _value.deadline
@@ -367,7 +360,6 @@ abstract class _$$ProjectItemModelImplCopyWith<$Res>
       String? owner,
       int? price,
       String? thumbnail,
-      String? count,
       String? deadline,
       String? description,
       int? waitlistCount,
@@ -400,7 +392,6 @@ class __$$ProjectItemModelImplCopyWithImpl<$Res>
     Object? owner = freezed,
     Object? price = freezed,
     Object? thumbnail = freezed,
-    Object? count = freezed,
     Object? deadline = freezed,
     Object? description = freezed,
     Object? waitlistCount = freezed,
@@ -448,10 +439,6 @@ class __$$ProjectItemModelImplCopyWithImpl<$Res>
       thumbnail: freezed == thumbnail
           ? _value.thumbnail
           : thumbnail // ignore: cast_nullable_to_non_nullable
-              as String?,
-      count: freezed == count
-          ? _value.count
-          : count // ignore: cast_nullable_to_non_nullable
               as String?,
       deadline: freezed == deadline
           ? _value.deadline
@@ -513,7 +500,6 @@ class _$ProjectItemModelImpl
       this.owner,
       this.price,
       this.thumbnail,
-      this.count,
       this.deadline,
       this.description,
       this.waitlistCount,
@@ -548,8 +534,6 @@ class _$ProjectItemModelImpl
   final int? price;
   @override
   final String? thumbnail;
-  @override
-  final String? count;
   @override
   final String? deadline;
   @override
@@ -586,7 +570,7 @@ class _$ProjectItemModelImpl
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'ProjectItemModel(id: $id, categoryId: $categoryId, projectTypeId: $projectTypeId, projectClass: $projectClass, userId: $userId, title: $title, owner: $owner, price: $price, thumbnail: $thumbnail, count: $count, deadline: $deadline, description: $description, waitlistCount: $waitlistCount, totalFundedCount: $totalFundedCount, totalFunded: $totalFunded, isOpen: $isOpen, category: $category, type: $type, image: $image, projectImage: $projectImage)';
+    return 'ProjectItemModel(id: $id, categoryId: $categoryId, projectTypeId: $projectTypeId, projectClass: $projectClass, userId: $userId, title: $title, owner: $owner, price: $price, thumbnail: $thumbnail, deadline: $deadline, description: $description, waitlistCount: $waitlistCount, totalFundedCount: $totalFundedCount, totalFunded: $totalFunded, isOpen: $isOpen, category: $category, type: $type, image: $image, projectImage: $projectImage)';
   }
 
   @override
@@ -603,7 +587,6 @@ class _$ProjectItemModelImpl
       ..add(DiagnosticsProperty('owner', owner))
       ..add(DiagnosticsProperty('price', price))
       ..add(DiagnosticsProperty('thumbnail', thumbnail))
-      ..add(DiagnosticsProperty('count', count))
       ..add(DiagnosticsProperty('deadline', deadline))
       ..add(DiagnosticsProperty('description', description))
       ..add(DiagnosticsProperty('waitlistCount', waitlistCount))
@@ -634,7 +617,6 @@ class _$ProjectItemModelImpl
             (identical(other.price, price) || other.price == price) &&
             (identical(other.thumbnail, thumbnail) ||
                 other.thumbnail == thumbnail) &&
-            (identical(other.count, count) || other.count == count) &&
             (identical(other.deadline, deadline) ||
                 other.deadline == deadline) &&
             (identical(other.description, description) ||
@@ -667,7 +649,6 @@ class _$ProjectItemModelImpl
         owner,
         price,
         thumbnail,
-        count,
         deadline,
         description,
         waitlistCount,
@@ -706,7 +687,6 @@ abstract class _ProjectItemModel implements ProjectItemModel {
       final String? owner,
       final int? price,
       final String? thumbnail,
-      final String? count,
       final String? deadline,
       final String? description,
       final int? waitlistCount,
@@ -739,8 +719,6 @@ abstract class _ProjectItemModel implements ProjectItemModel {
   int? get price;
   @override
   String? get thumbnail;
-  @override
-  String? get count;
   @override
   String? get deadline;
   @override

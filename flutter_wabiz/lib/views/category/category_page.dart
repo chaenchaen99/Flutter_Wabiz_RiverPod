@@ -160,6 +160,8 @@ class _CategoryPageState extends ConsumerState<CategoryPage> {
                             ),
                             child: IntrinsicWidth(
                               child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   const Gap(8),
                                   SvgPicture.asset(

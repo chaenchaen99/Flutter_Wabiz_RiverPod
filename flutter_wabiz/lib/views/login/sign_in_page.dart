@@ -54,6 +54,7 @@ class _SingInPageState extends State<SingInPage> {
                     const Gap(20),
                     TextFormField(
                       controller: passwordTextController,
+                      obscureText: true,
                       decoration: const InputDecoration(
                         hintText: "비밀번호 입력",
                       ),

@@ -6,7 +6,7 @@ part of 'category_view_model.dart';
 // RiverpodGenerator
 // **************************************************************************
 
-String _$fetchTypeTabsHash() => r'ad138b12c9d839e7f674ceeeabb94f95da8e4e8a';
+String _$fetchTypeTabsHash() => r'df5fb3cd7acf46a24f2316b4e640bcab5d64afad';
 
 /// See also [fetchTypeTabs].
 @ProviderFor(fetchTypeTabs)
