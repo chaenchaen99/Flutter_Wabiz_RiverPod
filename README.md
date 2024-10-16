@@ -4,7 +4,6 @@
     <img src="https://github.com/user-attachments/assets/02944d15-467c-4333-8108-44f97f213015" alt="Screenshot_1722262705" style="width:30%;"/>
     <img src="https://github.com/user-attachments/assets/87459c6f-8580-4fd9-9db0-f8c871f1c654" alt="Screenshot_1722262736" style="width:30%;"/>
     <img src="https://github.com/user-attachments/assets/1a81eadb-53b8-42d6-b7fe-a12aa6e187a2" alt="Screenshot_1722262764" style="width:30%;"/>
-    <img src="https://github.com/user-attachments/assets/a2ea98fa-0997-48ac-92e6-dea60bfd55c9" alt="Screenshot_1722262780" style="width:30%;"/>
 </p>
 
 이 앱은 개인이나 기업이 프로젝트, 제품, 서비스 등을 개발하기 위해 대중으로부터 소액의 자금을 모을 수 있도록 돕는 크라우드 펀딩 플랫폼을 클론 코딩하여 만든 앱입니다. 상태관리를 위해 Riverpod을 사용하였으며, figma 디자인 가이드를 따라 작업하였습니다.
